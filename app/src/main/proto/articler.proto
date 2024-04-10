@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "protos";
+option java_outer_classname = "ArticlerProto";
+
+message Message{
+  string body = 1;
+
+}
+
+message LoginForm{
+  string username = 1;
+  string password = 2;
+}
+
+
+message ArticleForm{
+  string title = 1;
+  string content = 2;
+  string shortContent = 3;
+  string createTime = 4;
+  string authorId = 5;
+  string token = 6;
+  string articleId = 7;
+}
+
+message UpdateUserForm{
+  string username = 1;
+  string password = 2;
+  string token = 3;
+}
+
+message DelateArticleForm{
+  string idArticle = 1;
+  string token = 2;
+}
+
+message ListArticles{
+  repeated ArticleForm arts = 1;
+}
+
+service ArticlerService {
+  rpc SayHello(Message) returns (Message) {}
+  rpc Login(LoginForm) returns (Message) {}
+  rpc Register(LoginForm) returns (Message) {}
+  rpc UpdateUser(UpdateUserForm) returns (Message) {} // username, password|| message = token
+  rpc DeleteUser(Message) returns (Message) {}  // message is token token = userid to delete
+  rpc GetAuthorByID(Message) returns (LoginForm) {}
+
+  // Article
+  rpc CreateArticle(ArticleForm) returns (Message) {}
+  rpc UpdateArticle(ArticleForm) returns (Message) {}
+  rpc DeleteArticle(DelateArticleForm) returns (Message) {}
+  rpc GetArticles(Message) returns (ListArticles) {}   // message definiuje co chce otrzymac || tylko moje || czy WSZYSTKIE
+
+}
