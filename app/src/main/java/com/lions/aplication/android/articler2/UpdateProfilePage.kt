@@ -25,6 +25,10 @@ import protos.UpdateUserForm
 @Composable
 fun UpdateProfilePage(navController: NavController, myName: String?, myPassword: String?){
 
+    if (token == ""){
+        navController.navigate("login")
+    }
+
 
     var username by remember { mutableStateOf(TextFieldValue(myName ?: "")) }
     var password by remember { mutableStateOf(TextFieldValue()) }

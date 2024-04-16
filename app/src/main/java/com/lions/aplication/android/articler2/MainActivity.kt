@@ -30,7 +30,7 @@ import protos.Message
 
 
 var token: String = ""
-val adressIP: String = "192.168.177.1"
+val adressIP: String = "192.168.100.177"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

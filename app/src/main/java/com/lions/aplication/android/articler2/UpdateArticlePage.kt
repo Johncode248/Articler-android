@@ -25,6 +25,9 @@ import protos.Message
 @Composable
 fun UpdateArticlePage(navController: NavController, myTitle: String?, mySummary: String?, myContent: String?, myArticleId: String? ){
 
+    if (token == ""){
+        navController.navigate("login")
+    }
 
     var title by remember { mutableStateOf(TextFieldValue(myTitle ?: "")) }
     var contentArticle by remember { mutableStateOf(TextFieldValue(myContent ?: "")) }

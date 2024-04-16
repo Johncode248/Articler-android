@@ -32,6 +32,10 @@ import protos.Message
 @Composable
 fun ProfilePage(navController: NavController){
 
+    if (token == ""){
+        navController.navigate("login")
+    }
+
     NavigationBottom(navController = navController, position = 2, content = { ListProfile(navController = navController)})
 
 }

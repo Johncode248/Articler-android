@@ -12,7 +12,7 @@ import androidx.navigation.navArgument
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "register") {
         composable("register") { RegistrationContent(navController) }
         composable("login") { LoginContent(navController) }
         composable("home") { HomePage(navController)}

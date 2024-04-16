@@ -25,9 +25,19 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.lions.aplication.android.articler2.ui.theme.Articler2Theme
+import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import protos.ArticlerServiceGrpc
 import protos.LoginForm
+import java.util.concurrent.TimeUnit
 
 
 @Composable
@@ -82,30 +92,48 @@ fun LoginContent(navController: NavController) {
 
 fun onLoginClicked(username: String, password: String, navController: NavController){
 
-
-    val channel = ManagedChannelBuilder.forAddress(adressIP, 9009)
-        .usePlaintext()
-        .build()
-
-    try {
-        val stub = ArticlerServiceGrpc.newBlockingStub(channel)
-
-        val input = LoginForm.newBuilder().setUsername(username).setPassword(password).build()
-        val reply = stub.login(input)
-
-        token = reply.body
-        channel.shutdown()
-
-        println("Token: $token")
-
-        if (token != ""){
-            navController.navigate("home")
-        }
+    if (username == "" || password == "") {
+        return
     }
 
-    catch (e: Exception) {
-        println(e)
+
+    CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val channel = ManagedChannelBuilder.forAddress(adressIP, 9009)
+                    .usePlaintext()
+                    .build()
+                val stub = ArticlerServiceGrpc.newBlockingStub(channel)
+                val input = LoginForm.newBuilder().setUsername(username).setPassword(password).build()
+                val reply = stub.login(input)
+
+                channel.shutdown()
+
+                if (reply != null){
+                    token = reply.body
+                }else{
+                    navController.navigate("login")
+                }
+
+                if (token.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("home")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        navController.navigate("login")
+                    }
+                }
+            }
+            catch (e: TimeoutCancellationException) {
+                navController.navigate("login")
+            }catch (e: Exception) {
+                navController.navigate("login")
+                println(e)
+            }
+
     }
+
+
 
 
 }

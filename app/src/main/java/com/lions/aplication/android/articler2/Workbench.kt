@@ -31,12 +31,18 @@ import protos.LoginForm
 @Composable
 fun Workbench(navController: NavController){
 
+    if (token == ""){
+        navController.navigate("login")
+    }
+
     NavigationBottom(navController = navController, position = 0, content = { WorkbenchContent() })
 }
 
 
 @Composable
 fun WorkbenchContent(){
+
+
 
     var title by remember { mutableStateOf(TextFieldValue()) }
     var contentArticle by remember { mutableStateOf(TextFieldValue()) }

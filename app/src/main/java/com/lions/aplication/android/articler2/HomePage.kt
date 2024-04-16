@@ -62,9 +62,11 @@ import protos.delateArticleForm
 
 @Composable
 fun HomePage(navController: NavController) {
-    if (token == "") {
+
+    if (token == ""){
         navController.navigate("login")
     }
+
 
     NavigationBottom(navController = navController, position = 1, content = { Lista(sort = "all", navController = navController)})
 }
